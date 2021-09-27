@@ -1,0 +1,6 @@
+
+
+
+
+CMD_ARGUMENTS = ARGV
+puts CMD_ARGUMENTS
