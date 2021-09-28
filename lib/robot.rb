@@ -57,7 +57,7 @@ class Robot
   ### Move the robot position based on facing direction
   ### provided it is within the table bounds
   ### return status = 0 if command is executed sucessfully, otherwise -1
-  ### command is ignored if original placement is invalid.
+  ### NOTE: command is ignored if original placement is invalid.
 
   def move
     status = 0
@@ -78,9 +78,13 @@ class Robot
   end
 
   ### Return the current position and the facing direction as a hash object
-
+  ### this is mainly used for testing
   def current_position
-    { x_pos: @x_pos, y_pos: @y_pos, facing: @facing, valid_placement: @valid_placement}
+    { x_pos: @x_pos, y_pos: @y_pos, facing: @facing, valid_placement: @valid_placement }
+  end
+
+  ### Return a string for the current position and facing direction of the robot
+  def report
+    @valid_placement ? "#{@x_pos},#{@y_pos},#{@facing}" : 'Invalid original placement.'
   end
 end
-
