@@ -1,3 +1,4 @@
+require_relative 'utility'
 require_relative 'robot'
 
 # Define the robot manager class
@@ -17,15 +18,16 @@ class RobotManager
     @table = table
     @robots = {} # start with an empty hash of robots. The structure will be a hash of id:robot object
     @active_robot_id = nil # nil = no active robot
-    @robot_sequence = 0  # the sequence# of the last robot created. 0 means none created
+    @robot_sequence = 0 # the sequence# of the last robot created. 0 means none created
   end
 
   ### Add a new robot to the robots hash
   ### Expect the placement positiion and facing direction to be supplied
   ### Facing direction must be one of 'NORTH', 'EAST', 'SOUTH', 'WEST' - not case sensitive
+  ### x_pos and y_pos is assumed to be integers
 
   def add_robot(x_pos, y_pos, facing)
-    @robot_sequence += 1 #add one to the sequence
+    @robot_sequence += 1 # add one to the sequence
     @robots[@robot_sequence] = Robot.new(@table, x_pos, y_pos, facing)
     @active_robot_id ||= @robot_sequence # set the id of the active robot
   end
@@ -35,9 +37,36 @@ class RobotManager
 
   def activate_robot(id)
     # need to check if id is a valid identifier of a robot
-    @active_robot_id = @robots[id].nil? ? @active_robot_id : id
+    status = 0
+    if integer?(id)
+      @active_robot_id = @robots[id.to_i].nil? ? @active_robot_id : id.to_i
+    else
+      status = -1
+    end
+    status
   end
 
+  ### execute the move for the active robot, if any.
+  def move
+    if active_robot
+      status = active_robot.move
+    else
+      status = -1
+    end
+    status
+  end
+
+  ### execute the turn for the active robot, if any.
+  def turn(facing)
+    if active_robot
+      status = active_robot.turn(facing)
+    else
+      status = -1
+    end
+    status
+  end
+
+  ### return the active robot object
   def active_robot
     @robots[@active_robot_id]
   end

@@ -1,123 +1,61 @@
+require_relative 'utility'
+require_relative 'table'
+require_relative 'robot_manager'
+require_relative 'command_controller'
+
 # The main Robot application component
 # Running Instruction:
-# ruby run.rb [command files]
+# At the root of the applicaiton folder:
+# ruby lib/run.rb [table width] [table height]
+#   - where [table width] & [table height] are optional positive integer arguments,
+#     setting the width and height of the table
+#   - if no argument is supplied, the default 5 x 5 table is assumed
+#   - if only one argument is supplied, the value sets both width and height of the table
+# e.g. ruby lib/run.rb 6 7
+#      This set the table to 6 units wide , 7 units in height
 #
-# Design:
-# Class CommandCentre
-#   - accept and validate commands
-#   - Responsible for creating robots, activate a robot, and report robot status
-#   - relegate the movement commands to the activated robots
-#
-#   Valid Commands:
-#   - PLACE X,Y,F
-#   - MOVE
-#   - LEFT
-#   - RIGHT
-#   - REPORT
-#   If the command is invalid, it will be ignore, and an error code + message is returned
+# To use a test file containing teh robot commands try issuing this in teh console:
+# ruby lib/run.rb < testfile
 
-# Define the default dimension of the table
-TABLE_WIDTH = 5
-TABLE_HEIGHT = 5
+# Define the default dimension of the table, can be overriden with supplied command line arguments
+DEFAULT_WIDTH = 5
+DEFAULT_HEIGHT = 5
 
-# Command line arguments supplied:  optional file name(s)
-CMD_ARGUMENTS = ARGV
+# Command line arguments supplied in ARGV: expect 1, 2 or no arguments
+# expect [widt] [height]
 
-# Define the table class
-class Table
-  def intitialize(table_width, table_height)
-    @table_width = table_width
-    @table_height = table_height
-  end
+# check the ARGV
+case ARGV.length
 
-  # is the x,y coordonate within the boundry of the table
-  def xy_within_table?(x_pos, y_pos)
-    (0...@table_width).include?(x_pos) && (0...@table_height).include?(y_pos)
-  end
+when 1 # 1 argument supplied, assumes it is a sqaure table.
+  # check it is an integer
+  raise Exception.new "Invalid command line argument. Expect integer greater than 0." unless integer?(ARGV[0])
+  width = ARGV[0].to_i
+  height = width
+
+when 2 # 2 argument
+  raise Exception.new "Invalid command line arguments. Expect integers greater than 0." unless integer?(ARGV[0]) && integer?(ARGV[1])
+  width = ARGV[0].to_i
+  height = ARGV[1].to_i
+else
+  width = DEFAULT_WIDTH
+  height = DEFAULT_HEIGHT
 end
 
+raise Exception.new "Invalid width and height. They need to be greater than 0." unless width>0 && height>0
 
-# Define the robot list class
-class RobotList
-  attr_reader :active_robot
+puts "Table dimentsion is set to Width: #{width} X Height: #{height}"
 
-  def intitialize(table)
-    @table = table
-    @robots = []
-    @active_robot = nil
-  end
+# let's create table, robot manager, and command controller objects
+table = Table.new(width, height)
+robot_manager = RobotManager.new(table)
+command_controller = CommandController.new(robot_manager)
 
-  def add_robot(x_pos, y_pos, facing)
-    @robots << Robot.new(x_pos, y_pos, facing)
-    active_robot(0) if @active_robot.nil? # activate the first robot if no active robot
-  end
-
-  def activate_robot(id)
-    status = 0
-
-    # need to check if id an integer
-    if (true if Integer(id) rescue false) && id.between?(1, @robots.length)
-      @active_robot = @robots[id - 1]
-    else
-      status = -1
-    end
-
-    status
-  end
+# now accept user commands
+puts 'Enter valid robot commands until you enter "quit" or "exit" '
+loop do
+  command = gets
+  break if command.nil? || ['quit', 'exit'].include?(command.strip.downcase.chomp)
+  command = command.strip.downcase.chomp
+  command_controller.accept_command(command) unless command == ''
 end
-
-# CommandCentre class defintion
-class CommandCentre
-  def initialize(table, robot_list)
-    @table = table
-    @robot_list = robot_list
-  end
-
-  def accept_command(command_line)
-    # status of the command
-    # 0 - means it's OK
-    # negative numbers means command is invalid
-    status = 0
-
-    # grab the commnd and argument in the command line
-    command, argument = command_line.upcase.split(' ')
-
-    # intepret the command
-    case command
-    when 'PLACE' # Place a new robot on the table
-
-      # assign the x,y coordinates, and facing direciton
-      x_pos, y_pos, facing = argument.split(',').map(&:strip) #strip blanks spaces
-
-      # check x,y is within the table size
-      if @table.xy_within_table?(x_pos, y_pos) && Robot.valid_direction(facing)
-        @robot_list.add_robot(x_pos, y_pox, facing)
-      else
-        status = -1
-      end
-
-    when 'ROBOT'
-      status = @robot_list.active_robot.activate(argument)
-
-    when 'LEFT'
-      @robot_list.active_robot.left
-
-    when 'RIGHT'
-      @robot_list.active_robot.right
-
-    when 'MOVE'
-      status = @robot_list.active_robot.left
-
-    when 'REPORT'
-      puts @robot_list.report
-    else
-      status = -1
-    end
-
-    status
-  end
-end
-
-# Note:
-# As per instruction - PLACE can place robot outside the square, which means it can ignore commands(as per instruction)
-# Each robot has an assigned number, if a robot is removed (not impleented), the robot number should be consistent.

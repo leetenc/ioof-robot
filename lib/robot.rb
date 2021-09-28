@@ -1,4 +1,4 @@
-require_relative 'table'
+require_relative 'utility'
 
 ### Define the Robot class to instantiate teh robot, and accept commands.
 ### Commands are ignored, if one of the following is true
@@ -11,14 +11,14 @@ require_relative 'table'
 ### - move method move teh robot position in the direction it is facing
 class Robot
   # define a constant to hold the movement along x and y coordinate based on facing direction
-  MOVEMENT = {
+  @@MOVEMENT = {
     NORTH: { dx:  0, dy:  1 },
      EAST: { dx:  1, dy:  0 },
     SOUTH: { dx:  0, dy: -1 },
      WEST: { dx: -1, dy:  0 }
   }.freeze
 
-  DIRECTIONS = MOVEMENT.keys.freeze # Get the directions from the movement [:NORTH, :EAST,...]
+  @@DIRECTIONS = @@MOVEMENT.keys.freeze # Get the directions from the movement [:NORTH, :EAST,...]
   TURN = { LEFT: -1, RIGHT: 1 }.freeze # Turning direction -1 for anticlockwise, 1 for clockwise turn
 
   def initialize(table, x_pos, y_pos, facing)
@@ -26,14 +26,14 @@ class Robot
     @x_pos = x_pos
     @y_pos = y_pos
     @facing = facing.upcase.to_sym
-    @movement = MOVEMENT[@facing] # assign the directional movement
-    @valid_placement = valid_direction? && @table.xy_within_table?(x_pos, y_pos)
+    @movement = @@MOVEMENT[@facing] # assign the directional movement
+    @valid_placement = Robot.valid_direction?(@facing) && @table.xy_within_table?(x_pos, y_pos)
   end
 
   ### check if the facing direction provided is a valid direction
 
-  def valid_direction?
-    !DIRECTIONS.index(@facing).nil?
+  def self.valid_direction?(facing)
+    !@@DIRECTIONS.index(facing.to_sym).nil?
   end
 
   ### Turn the face : direction (string) =  'LEFT' (turn anti-clockwise), 'RIGHT' (turn clockwise)
@@ -45,11 +45,13 @@ class Robot
     if @valid_placement
       turn_direction = TURN[direction.upcase.to_sym]
       if !turn_direction.nil?
-        @facing = DIRECTIONS[(DIRECTIONS.index(@facing) + turn_direction) % DIRECTIONS.length]
-        @movement = MOVEMENT[@facing]
+        @facing = @@DIRECTIONS[(@@DIRECTIONS.index(@facing) + turn_direction) % @@DIRECTIONS.length]
+        @movement = @@MOVEMENT[@facing]
       else
         status = -1
       end
+    else
+      status = -1
     end
     status
   end
@@ -85,6 +87,6 @@ class Robot
 
   ### Return a string for the current position and facing direction of the robot
   def report
-    @valid_placement ? "#{@x_pos},#{@y_pos},#{@facing}" : 'Invalid original placement.'
+    "#{@x_pos},#{@y_pos},#{@facing}#{@valid_placement ? '' : ' - Invalid original placement.'}"
   end
 end
