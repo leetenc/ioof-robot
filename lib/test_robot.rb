@@ -1,9 +1,11 @@
+### This is a ruby code to test the class objects
+### Classes tested in order:  Robot, RobotManager, CommandController
+
 require_relative 'utility'
 require_relative 'robot'
 require_relative 'table'
 require_relative 'robot_manager'
 require_relative 'command_controller'
-
 
 table = Table.new(5, 5)
 robot = Robot.new(table, 1, 2, 'NORTH')
@@ -67,4 +69,4 @@ controller.accept_command('REPORT')
 controller.accept_command('PLACE -2,a,EAST')
 controller.accept_command('REPORT')
 
-controller.accept_command('BAD Command')
+controller.accept_command('XYZ Command')

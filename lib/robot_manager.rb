@@ -37,9 +37,9 @@ class RobotManager
 
   def activate_robot(id)
     # need to check if id is a valid identifier of a robot
-    status = 0
-    if integer?(id)
-      @active_robot_id = @robots[id.to_i].nil? ? @active_robot_id : id.to_i
+    if integer?(id) && !@robots[id.to_i].nil?
+      @active_robot_id = id.to_i
+      status = 0
     else
       status = -1
     end

@@ -21,19 +21,28 @@ class Robot
   @@DIRECTIONS = @@MOVEMENT.keys.freeze # Get the directions from the movement [:NORTH, :EAST,...]
   TURN = { LEFT: -1, RIGHT: 1 }.freeze # Turning direction -1 for anticlockwise, 1 for clockwise turn
 
+  ### robot instantiation
+  ### Requires: table       - the robot is placed
+  ###           x_pos,y_pos - position placed on the table
+  ###           facing      - direction
+
   def initialize(table, x_pos, y_pos, facing)
     @table = table
     @x_pos = x_pos
     @y_pos = y_pos
     @facing = facing.upcase.to_sym
-    @movement = @@MOVEMENT[@facing] # assign the directional movement
-    @valid_placement = Robot.valid_direction?(@facing) && @table.xy_within_table?(x_pos, y_pos)
+
+    # assign the current directional movement based on @facing
+    @movement = @@MOVEMENT[@facing]
+
+    # check that the placement is valid and assign it to a constant
+    @valid_placement = (Robot.valid_direction?(@facing) && @table.xy_within_table?(x_pos, y_pos)).freeze
   end
 
   ### check if the facing direction provided is a valid direction
 
   def self.valid_direction?(facing)
-    !@@DIRECTIONS.index(facing.to_sym).nil?
+    !@@DIRECTIONS.index(facing.nil? ? nil : facing.to_sym).nil?
   end
 
   ### Turn the face : direction (string) =  'LEFT' (turn anti-clockwise), 'RIGHT' (turn clockwise)
@@ -59,7 +68,7 @@ class Robot
   ### Move the robot position based on facing direction
   ### provided it is within the table bounds
   ### return status = 0 if command is executed sucessfully, otherwise -1
-  ### NOTE: command is ignored if original placement is invalid.
+  ### NOTE: command is ignored if original placement is invalid, or an attempt is made to move off table.
 
   def move
     status = 0
@@ -67,7 +76,7 @@ class Robot
       new_x_pos = @x_pos + @movement[:dx]
       new_y_pos = @y_pos + @movement[:dy]
 
-      if @table.xy_within_table?(new_x_pos, new_y_pos)
+      if @table.xy_within_table?(new_x_pos, new_y_pos)  # check if new position is within bound
         @x_pos = new_x_pos
         @y_pos = new_y_pos
       else
@@ -86,6 +95,7 @@ class Robot
   end
 
   ### Return a string for the current position and facing direction of the robot
+  ### if original placement was invalid attach a message to the string indicating invalid original placement.
   def report
     "#{@x_pos},#{@y_pos},#{@facing}#{@valid_placement ? '' : ' - Invalid original placement.'}"
   end

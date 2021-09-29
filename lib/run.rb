@@ -23,18 +23,19 @@ DEFAULT_HEIGHT = 5
 
 # Command line arguments supplied in ARGV: expect 1, 2 or no arguments
 # expect [widt] [height]
+HELP_TEXT = "Command Help:\n\truby lib/run.rb [width] [height]".freeze
 
 # check the ARGV
 case ARGV.length
 
 when 1 # 1 argument supplied, assumes it is a sqaure table.
   # check it is an integer
-  raise Exception.new "Invalid command line argument. Expect integer greater than 0." unless integer?(ARGV[0])
+  raise Exception.new "Invalid command line argument. Expecting integer.\n\n#{HELP_TEXT}" unless integer?(ARGV[0])
   width = ARGV[0].to_i
   height = width
 
-when 2 # 2 argument
-  raise Exception.new "Invalid command line arguments. Expect integers greater than 0." unless integer?(ARGV[0]) && integer?(ARGV[1])
+when 2 # 2 arguments - expect width & heihgt supplied are integers
+  raise Exception.new "Invalid command line arguments. Expecting integers.\n\n#{HELP_TEXT}" unless integer?(ARGV[0]) && integer?(ARGV[1])
   width = ARGV[0].to_i
   height = ARGV[1].to_i
 else
@@ -42,11 +43,15 @@ else
   height = DEFAULT_HEIGHT
 end
 
-raise Exception.new "Invalid width and height. They need to be greater than 0." unless width>0 && height>0
+# check that the width and height are both > 0
+raise Exception.new 'Invalid width or height supplied. They need to be greater than 0.' unless width > 0 && height > 0
 
 puts "Table dimentsion is set to Width: #{width} X Height: #{height}"
 
-# let's create table, robot manager, and command controller objects
+#
+### let's create the table, robot manager, and command controller objects
+#
+
 table = Table.new(width, height)
 robot_manager = RobotManager.new(table)
 command_controller = CommandController.new(robot_manager)
@@ -54,8 +59,13 @@ command_controller = CommandController.new(robot_manager)
 # now accept user commands
 puts 'Enter valid robot commands until you enter "quit" or "exit" '
 loop do
-  command = gets
+  # get the user input from standard input
+  command = STDIN.gets
+
+  # exitloop if user quit/exit or end of standard input reached
   break if command.nil? || ['quit', 'exit'].include?(command.strip.downcase.chomp)
-  command = command.strip.downcase.chomp
+
+  # issue the command to the command controller
+  command = command.strip.chomp
   command_controller.accept_command(command) unless command == ''
 end
