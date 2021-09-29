@@ -51,23 +51,23 @@ ruby lib/run.rb 6 4 < test_data/testfile_01
 ```
 The example above is to request the applicaiotn to create a table dimension of **6 X 4** and accept commands stored in the file **./test_data/testfile_01**
 
-Robot commands issued will be ignored if
-- The command is invalid (must be one of `PLACE x,y,facing`, `ROBOT id`, `MOVE`, 'RIGHT`, `LEFT`, `REPORT`)
+**Note**: Robot commands issued will be ignored if
+- The command is invalid (must be one of `PLACE x,y,facing`, `ROBOT id`, `MOVE`, `RIGHT`, `LEFT`, `REPORT`)
 - ROBOT command is issued with an invalid id
-- PLACE command is issued with x or y non-integer values, or the facing direction is not one of **NORTH**, **EAST**, **SOUTH**, or **WEST**.
+- PLACE command is issued with x or y non-integer values, or the facing direction is not one of *NORTH*, *EAST*, *SOUTH*, or *WEST*.
 - The active robot's original placement is outside the table boundary
 
 ## Test Data Files Supplied
-There are 3 test files supplied which contain robot commands to be submitted to the application. Teh test data files are located at `./test_data`
+There are 3 test files supplied which contain robot commands to be submitted to the application. The test data files are located at `./test_data`
 ```
 test_data/testfile_01 <-- This test all possible valid commands
 test_data/testfile_02 <-- This file test the robot that is palced outside the table is created but would ignore all future commands 
 test_data/testfile_03 <-- This file test the rejection of invalid commands
 ```
 # Unit Testing using Rspec
-Unit Test specification files has been created to test the Robot and RobotManager class objects.  The test files are located in 
-
-`<applicaiton folder>/spec/`
+Unit Test specification files have been created to test the Robot and RobotManager class objects.  
+The test files are located in 
+`./spec`
 
 To run the test files in the folder, issue the following command at the application folder:
 
@@ -85,6 +85,6 @@ Utility is a helper class to provide generic global methods (in this case, a met
   
 The run.rb is the starting point. It instantiates the following object before user input is accpeted:
 - **Table** object based on the parameterised width & height
-- **RobotManager with the table object, and
-- **CommandController** with the **RobotManager** that the command controller with issue valid commands to.
+- **RobotManager** with the table object, and
+- **CommandController** with the **RobotManager** that the command controller will issue valid commands to.
   
