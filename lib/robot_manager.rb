@@ -2,7 +2,7 @@ require_relative 'utility'
 require_relative 'robot'
 
 # Define the robot manager class
-# This class instantiate robots and mantains a list of instatiated robots
+# This class instantiate and mantains a list of instatiated robots
 # This keeps track of which robot is active
 #
 # The class is instantiate with a table object

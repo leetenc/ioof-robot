@@ -15,7 +15,7 @@ require_relative 'command_controller'
 #      This set the table to 6 units wide , 7 units in height
 #
 # To use a test file containing teh robot commands try issuing this in teh console:
-# ruby lib/run.rb < testfile
+# ruby lib/run.rb < test_data/testfile_01
 
 # Define the default dimension of the table, can be overriden with supplied command line arguments
 DEFAULT_WIDTH = 5

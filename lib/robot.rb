@@ -5,10 +5,14 @@ require_relative 'utility'
 ### - robot is at a position place outside the table bounds
 ###    NOTE: as per instruction, if the PLACE command place the robot outside the table, it will place the robot outside the table
 ### - if the initial facing direction provided is invalid
-### Robot Class methods:
+###
+### Robot is instantiated with a table object, x, y coordinate, and facing direction ('NORTH','EAST'...)
+###
+### METHODS:
 ### - initialize method requires table object, the starting x,y position, and facing dircection (string 'NORTH', 'EAST', 'SOUTH', 'WEST')
 ### - turn method requires a turning direction. Valid values are 'LEFT' or 'RIGHT'
 ### - move method move teh robot position in the direction it is facing
+
 class Robot
   # define a constant to hold the movement along x and y coordinate based on facing direction
   @@MOVEMENT = {
