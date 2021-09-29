@@ -12,10 +12,11 @@ LEFT
 RIGHT
 REPORT
 ```
-In addtion, each PLACE command instantiate a new robot identified by a sequence number that is subject to the same commands. Only one robot at any one time can be activated to accept commands. A robot becomes active when the ROBOT <id> commnd is issued, where <id> identified the robot to be avtivated. All susequent commands will be accepted by the active robot until it is deactivated by another ROBOT command.  
+In addtion, each PLACE command instantiate a new robot identified by a sequence number that is subject to the same commands. Only one robot at any one time can be activated to accept commands. A robot becomes active when the `ROBOT id` command is issued, where *id* identifies the robot to be activated. All subsequent commands will be accepted by the active robot until it is deactivated by another ROBOT command.  
 
 By default the first robot placed will become the active robot.
-If a new robot is initially placed outside the table (negative coordinates are also considered outside the boundary), it is created but will ignore all future commands even when activated (as per coding challenge instruction).
+
+**Note**: If a new robot is initially placed outside the table (negative coordinates are also considered outside the boundary), it is created but will ignore all future commands even when activated (as per coding challenge instruction).
 
 Invalid commands will be ignored (see **User Manual** below)
   
