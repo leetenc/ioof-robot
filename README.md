@@ -80,10 +80,17 @@ The application consists of 4 main objects:
 - **RobotManager** : An object to instantion and maintain the states of robots
 - **Robot** : The robot object to accept valid commands to move around the table and report it's position
 
-Each object class are defined within each own ruby class file.
+Each object class are defined within each own ruby class file in the `./lib` folder:
+```
+./lib/
+    command_controller.rb
+    table.rb
+    robot_manager.rb
+    robot.rb
+```
 Utility is a helper class to provide generic global methods (in this case, a method to check if a string is an integer)
   
-The run.rb is the starting point. It instantiates the following object before user input is accpeted:
+The run.rb is the starting point. It instantiates the following objects before user input is accpeted:
 - **Table** object based on the parameterised width & height
 - **RobotManager** with the table object, and
 - **CommandController** with the **RobotManager** that the command controller will issue valid commands to.
