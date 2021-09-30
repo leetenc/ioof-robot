@@ -51,19 +51,20 @@ ruby lib/run.rb 6 4 < test_data/testfile_01
 ```
 The example above is to request the applicaiotn to create a table dimension of **6 X 4** and accept commands stored in the file **./test_data/testfile_01**
 
+#### Test Data Files Supplied for user testing
+There are 3 test data files supplied which contain robot commands to be submitted to the application. The test data files are located at `./test_data`
+```
+./test_data/testfile_01 <-- This file test all possible valid commands
+./test_data/testfile_02 <-- This file test the robot that is placed outside the table to ignore all future commands 
+./test_data/testfile_03 <-- This file test the rejection of invalid commands
+```
+
 **Note**: Robot commands issued will be ignored if
 - The command is invalid (must be one of `PLACE x,y,facing`, `ROBOT id`, `MOVE`, `RIGHT`, `LEFT`, `REPORT`)
 - ROBOT command is issued with an invalid id
 - PLACE command is issued with x or y non-integer values, or the facing direction is not one of *NORTH*, *EAST*, *SOUTH*, or *WEST*.
 - The active robot's original placement is outside the table boundary
 
-## Test Data Files Supplied
-There are 3 test files supplied which contain robot commands to be submitted to the application. The test data files are located at `./test_data`
-```
-test_data/testfile_01 <-- This test all possible valid commands
-test_data/testfile_02 <-- This file test the robot that is palced outside the table is created but would ignore all future commands 
-test_data/testfile_03 <-- This file test the rejection of invalid commands
-```
 # Unit Testing using Rspec
 Unit Test specification files have been created to test the Robot and RobotManager class objects.  
 The test files are located in 
