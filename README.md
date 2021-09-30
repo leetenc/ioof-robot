@@ -90,7 +90,7 @@ Each object class is defined within each own ruby class file in the `./lib` fold
 ```
 Utility is a helper class to provide generic global methods (in this case, a method to check if a string is an integer)
   
-The run.rb is the starting point. It instantiates the following objects before user input is accpeted:
+The run.rb is the starting point. It instantiates the following objects before user input is accepted:
 - **Table** object based on the parameterised width & height
 - **RobotManager** with the table object, and
 - **CommandController** with the **RobotManager** that the command controller will issue valid commands to.
