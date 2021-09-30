@@ -80,7 +80,7 @@ The application consists of 4 main objects:
 - **RobotManager** : An object to instantion and maintain the states of robots
 - **Robot** : The robot object to accept valid commands to move around the table and report it's position
 
-Each object class are defined within each own ruby class file in the `./lib` folder:
+Each object class is defined within each own ruby class file in the `./lib` folder:
 ```
 ./lib/
     command_controller.rb
